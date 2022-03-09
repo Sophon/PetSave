@@ -50,8 +50,8 @@ data class ApiBreeds(
 @JsonClass(generateAdapter = true)
 data class ApiColors(
     @Json(name = "primary") val primary: String? = null,
-    @Json(name = "secondary") val secondary: Any? = null,
-    @Json(name = "tertiary") val tertiary: Any? = null
+    @Json(name = "secondary") val secondary: String? = null,
+    @Json(name = "tertiary") val tertiary: String? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -93,8 +93,8 @@ data class ApiVideoLink(
 
 @JsonClass(generateAdapter = true)
 data class ApiAddress(
-    @Json(name = "address1") val address1: Any? = null,
-    @Json(name = "address2") val address2: Any? = null,
+    @Json(name = "address1") val address1: String? = null,
+    @Json(name = "address2") val address2: String? = null,
     @Json(name = "city") val city: String? = null,
     @Json(name = "country") val country: String? = null,
     @Json(name = "postcode") val postcode: String? = null,
