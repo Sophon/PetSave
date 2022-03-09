@@ -43,7 +43,7 @@ data class ApiAttributes(
 data class ApiBreeds(
     @Json(name = "mixed") val mixed: Boolean? = null,
     @Json(name = "primary") val primary: String? = null,
-    @Json(name = "secondary") val secondary: Any? = null,
+    @Json(name = "secondary") val secondary: String? = null,
     @Json(name = "unknown") val unknown: Boolean? = null
 )
 
