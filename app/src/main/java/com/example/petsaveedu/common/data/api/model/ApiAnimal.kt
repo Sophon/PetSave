@@ -1,4 +1,4 @@
-package com.example.petsaveedu.common.data.api
+package com.example.petsaveedu.common.data.api.model
 
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Json
