@@ -6,7 +6,7 @@ class ApiAnimalMapper @Inject constructor(
     private val apiBreedsMapper: ApiBreedsMapper,
     private val apiColorsMapper: ApiColorsMapper,
     private val apiContactMapper: ApiContactMapper,
-    private val apiHabitatAdapter: ApiHabitatAdapter,
+    private val apiHabitatAdaptationMapper: ApiHabitatAdaptationMapper,
     private val apiPhotoMapper: ApiPhotoMapper,
     private val apiVideoMapper: ApiVideoMapper,
     private val apiHealthDetailsMapper: ApiHealthDetailsMapper

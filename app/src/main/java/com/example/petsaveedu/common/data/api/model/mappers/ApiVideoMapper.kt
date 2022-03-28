@@ -7,6 +7,6 @@ import javax.inject.Inject
 class ApiVideoMapper @Inject constructor(): ApiMapper<ApiVideoLink?, Media.Video> {
 
     override fun mapToDomain(apiEntity: ApiVideoLink?): Media.Video {
-        return Media.Video(embed = apiEntity?.embed)
+        return Media.Video(embed = apiEntity?.embed.orEmpty())
     }
 }
