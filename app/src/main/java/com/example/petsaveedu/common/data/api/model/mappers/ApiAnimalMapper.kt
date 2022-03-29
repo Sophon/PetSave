@@ -5,6 +5,7 @@ import com.example.petsaveedu.common.domain.model.animal.AdoptionStatus
 import com.example.petsaveedu.common.domain.model.animal.Media
 import com.example.petsaveedu.common.domain.model.animal.details.*
 import com.example.petsaveedu.common.domain.model.organization.Organization
+import com.example.petsaveedu.common.utils.DateTimeUtils
 import java.util.*
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class ApiAnimalMapper @Inject constructor(
             media = mapMedia(apiEntity),
             tags = apiEntity.tags.orEmpty(),
             adoptionStatus = parseAdoptionStatus(apiEntity.status),
-            publishedAt = apiEntity.publishedAt //TODO: create a util for LocalDateTime
+            publishedAt = DateTimeUtils.parse(apiEntity.publishedAt.orEmpty())
         )
     }
 
