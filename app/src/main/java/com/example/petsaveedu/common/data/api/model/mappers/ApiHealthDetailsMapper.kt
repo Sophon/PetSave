@@ -8,10 +8,10 @@ class ApiHealthDetailsMapper @Inject constructor(): ApiMapper<ApiAttributes?, He
 
     override fun mapToDomain(apiEntity: ApiAttributes?): HealthDetails {
         return HealthDetails(
-            isDeclawed = apiEntity?.declawed,
-            hasSpecialNeeds = apiEntity?.specialNeeds,
-            isSpayedOrNeutered = apiEntity?.spayedNeutered,
-            shotsAreCurrent = apiEntity?.shotsCurrent
+            isDeclawed = apiEntity?.declawed ?: false,
+            hasSpecialNeeds = apiEntity?.specialNeeds ?: false,
+            isSpayedOrNeutered = apiEntity?.spayedNeutered ?: false,
+            shotsAreCurrent = apiEntity?.shotsCurrent ?: false
         )
     }
 }
