@@ -26,7 +26,6 @@ import org.threeten.bp.Instant
 @Config(manifest = Config.NONE, sdk = [Build.VERSION_CODES.P])
 class AuthenticationInterceptorTest {
 
-
     private lateinit var preferences: Preferences
     private lateinit var mockWebServer: MockWebServer
     private lateinit var authenticationInterceptor: AuthenticationInterceptor
@@ -86,13 +85,9 @@ class AuthenticationInterceptorTest {
     }
 
     @Test
-    fun expiredToken_authEndpointHasCorrectHeader() {
+    fun expiredToken_authRequestHasCorrectHeader() {
         //Given
-        `when`(preferences.getToken()).thenReturn(expiredToken)
-        `when`(preferences.getTokenExpirationTime()).thenReturn(
-            Instant.now().minusMillis(3600).epochSecond
-        )
-        mockWebServer.dispatcher = getDispatcherForExpiredToken()
+        givenExpiredToken()
 
         //When
         okHttpClient.newCall(
@@ -111,11 +106,7 @@ class AuthenticationInterceptorTest {
     @Test
     fun expiredToken_preferenceMethodsCalledInCorrectOrder() {
         //Given
-        `when`(preferences.getToken()).thenReturn(expiredToken)
-        `when`(preferences.getTokenExpirationTime()).thenReturn(
-            Instant.now().minusMillis(3600).epochSecond
-        )
-        mockWebServer.dispatcher = getDispatcherForExpiredToken()
+        givenExpiredToken()
 
         //When
         okHttpClient.newCall(
@@ -128,6 +119,52 @@ class AuthenticationInterceptorTest {
         inOrder(preferences).let { order ->
             order.verify(preferences).getToken()
             order.verify(preferences).saveToken(validToken)
+        }
+    }
+
+    @Test
+    fun expiredToken_preferencesMethodsCalledCorrectAmount() {
+        //Given
+        givenExpiredToken()
+
+        //When
+        okHttpClient.newCall(
+            Request.Builder()
+                .url(mockWebServer.url(ApiConstants.ANIMALS_ENDPOINT))
+                .build()
+        ).execute()
+
+        //Then
+        verify(preferences, times(1)).getToken()
+        verify(preferences, times(1)).saveToken(validToken)
+        verify(preferences, times(1)).getTokenExpirationTime()
+        verify(preferences, times(1)).saveTokenExpirationTime(anyLong())
+        verify(preferences, times(1))
+            .saveTokenType(ApiParameters.TOKEN_TYPE.trim())
+
+        verifyNoMoreInteractions(preferences)
+    }
+    
+    @Test
+    fun expiredToken_animalRequestHasCorrectHeader() {
+        //Given
+        givenExpiredToken()
+        
+        //When
+        okHttpClient.newCall(
+            Request.Builder()
+                .url(mockWebServer.url(ApiConstants.ANIMALS_ENDPOINT))
+                .build()
+        ).execute()
+
+
+        //Then
+        mockWebServer.takeRequest()
+        mockWebServer.takeRequest().let { animalRequest ->
+            assertThat(animalRequest.method).isEqualTo("GET")
+            assertThat(animalRequest.path).isEqualTo(animalsEndpointPath)
+            assertThat(animalRequest.getHeader(ApiParameters.AUTH_HEADER))
+                .isEqualTo(ApiParameters.TOKEN_TYPE + validToken)
         }
     }
 
@@ -157,5 +194,13 @@ class AuthenticationInterceptorTest {
                 }
             }
         }
+    }
+
+    private fun givenExpiredToken() {
+        `when`(preferences.getToken()).thenReturn(expiredToken)
+        `when`(preferences.getTokenExpirationTime()).thenReturn(
+            Instant.now().minusMillis(3600).epochSecond
+        )
+        mockWebServer.dispatcher = getDispatcherForExpiredToken()
     }
 }
