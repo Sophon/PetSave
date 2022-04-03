@@ -3,6 +3,7 @@ package com.example.petsaveedu.common.data.di
 import com.example.petsaveedu.common.data.api.ApiConstants
 import com.example.petsaveedu.common.data.api.PetFinderApi
 import com.example.petsaveedu.common.data.api.interceptors.AuthenticationInterceptor
+import com.example.petsaveedu.common.data.api.interceptors.NetworkStatusInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,9 +35,11 @@ object ApiModule {
 
     @Provides
     fun provideOkHttpClient(
+        networkStatusInterceptor: NetworkStatusInterceptor,
         authenticationInterceptor: AuthenticationInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(networkStatusInterceptor)
             .addInterceptor(authenticationInterceptor)
             .build()
     }
