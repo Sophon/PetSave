@@ -6,5 +6,6 @@ enum class Coat {
     MEDIUM,
     LONG,
     WIRE,
-    CURLY
+    CURLY,
+    UNKNOWN
 }

@@ -4,5 +4,6 @@ enum class Size {
     SMALL,
     MEDIUM,
     LARGE,
-    XLARGE
+    XLARGE,
+    UNKNOWN
 }

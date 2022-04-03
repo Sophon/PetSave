@@ -4,5 +4,6 @@ enum class Age {
     BABY,
     YOUNG,
     ADULT,
-    SENIOR
+    SENIOR,
+    UNKNOWN
 }
