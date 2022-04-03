@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.*
 import android.os.Build
 import com.example.petsaveedu.common.data.api.ApiConstants
 import com.example.petsaveedu.common.data.api.ApiParameters
+import com.example.petsaveedu.common.data.api.utils.JsonReader.getJson
 import com.example.petsaveedu.common.data.preferences.Preferences
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -61,7 +62,7 @@ class AuthenticationInterceptorTest {
 
 
     @Test
-    fun authInterceptor_validToken() {
+    fun validTokenRequestHasCorrectResponse() {
         //Given
         `when`(preferences.getToken()).thenReturn(validToken)
         `when`(preferences.getTokenExpirationTime()).thenReturn(
@@ -84,12 +85,48 @@ class AuthenticationInterceptorTest {
                 .isEqualTo(ApiParameters.TOKEN_TYPE + validToken)
         }
     }
+    
+    @Test
+    fun expiredTokenTest() {
+        //Given
+        `when`(preferences.getToken()).thenReturn(expiredToken)
+        `when`(preferences.getTokenExpirationTime()).thenReturn(
+            Instant.now().minusMillis(3600).epochSecond
+        )
+        mockWebServer.dispatcher = getDispatcherForExpiredToken()
+        
+        //When
+        okHttpClient.newCall(
+            Request.Builder()
+                .url(mockWebServer.url(ApiConstants.ANIMALS_ENDPOINT))
+                .build()
+        ).execute()
+        
+        //Then
+        //TODO:
+    }
 
 
     private fun getDispatcherForValidToken(): Dispatcher {
         return object: Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
                 return when(request.path) {
+                    animalsEndpointPath -> { MockResponse().setResponseCode(200) }
+                    else -> { MockResponse().setResponseCode(404) }
+                }
+            }
+        }
+    }
+
+    private fun getDispatcherForExpiredToken(): Dispatcher {
+        return object: Dispatcher() {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                return when(request.path) {
+                    authEndpointPath -> {
+                        MockResponse()
+                            .setResponseCode(200)
+                            .setBody(getJson("validToken.json"))
+                    }
                     animalsEndpointPath -> { MockResponse().setResponseCode(200) }
                     else -> { MockResponse().setResponseCode(404) }
                 }
