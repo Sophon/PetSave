@@ -101,10 +101,8 @@ class AuthenticationInterceptor @Inject constructor(
     }
 
     private fun storeToken(token: ApiToken) {
-        preferences.saveToken(token.accessToken!!)
-
         preferences.apply {
-            saveToken(token.accessToken)
+            saveToken(token.accessToken!!)
             saveTokenExpirationTime(token.expiresAt)
             saveTokenType(token.tokenType!!)
         }

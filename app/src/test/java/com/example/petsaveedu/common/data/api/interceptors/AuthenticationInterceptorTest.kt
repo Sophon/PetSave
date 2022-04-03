@@ -16,8 +16,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.threeten.bp.Instant
@@ -62,7 +61,7 @@ class AuthenticationInterceptorTest {
 
 
     @Test
-    fun validTokenRequestHasCorrectResponse() {
+    fun validToken_requestHasCorrectHeader() {
         //Given
         `when`(preferences.getToken()).thenReturn(validToken)
         `when`(preferences.getTokenExpirationTime()).thenReturn(
@@ -85,25 +84,51 @@ class AuthenticationInterceptorTest {
                 .isEqualTo(ApiParameters.TOKEN_TYPE + validToken)
         }
     }
-    
+
     @Test
-    fun expiredTokenTest() {
+    fun expiredToken_authEndpointHasCorrectHeader() {
         //Given
         `when`(preferences.getToken()).thenReturn(expiredToken)
         `when`(preferences.getTokenExpirationTime()).thenReturn(
             Instant.now().minusMillis(3600).epochSecond
         )
         mockWebServer.dispatcher = getDispatcherForExpiredToken()
-        
+
         //When
         okHttpClient.newCall(
             Request.Builder()
                 .url(mockWebServer.url(ApiConstants.ANIMALS_ENDPOINT))
                 .build()
         ).execute()
-        
+
         //Then
-        //TODO:
+        mockWebServer.takeRequest().let { tokenRequest ->
+            assertThat(tokenRequest.method).isEqualTo("POST")
+            assertThat(tokenRequest.path).isEqualTo(authEndpointPath)
+        }
+    }
+    
+    @Test
+    fun expiredToken_preferenceMethodsCalledInCorrectOrder() {
+        //Given
+        `when`(preferences.getToken()).thenReturn(expiredToken)
+        `when`(preferences.getTokenExpirationTime()).thenReturn(
+            Instant.now().minusMillis(3600).epochSecond
+        )
+        mockWebServer.dispatcher = getDispatcherForExpiredToken()
+
+        //When
+        okHttpClient.newCall(
+            Request.Builder()
+                .url(mockWebServer.url(ApiConstants.ANIMALS_ENDPOINT))
+                .build()
+        ).execute()
+
+        //Then
+        inOrder(preferences).let { order ->
+            order.verify(preferences).getToken()
+            order.verify(preferences).saveToken(validToken)
+        }
     }
 
 
