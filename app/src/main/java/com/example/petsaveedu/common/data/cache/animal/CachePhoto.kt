@@ -20,6 +20,8 @@ import androidx.room.PrimaryKey
 )
 data class CachePhoto(
     @PrimaryKey(autoGenerate = true) val photoId: Long,
+    val animalId: Long,
+
     val medium: String,
     val full: String
 )

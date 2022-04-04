@@ -20,5 +20,7 @@ import androidx.room.PrimaryKey
 )
 data class CacheVideo(
     @PrimaryKey(autoGenerate = true) val videoId: Long = 0,
+    val animalId: Long,
+
     val video: String
 )

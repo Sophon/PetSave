@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "orgs")
+@Entity(tableName = "organizations")
 data class CacheOrganization(
-    @PrimaryKey(autoGenerate = false) val orgId: String,
+    @PrimaryKey(autoGenerate = false) val organizationId: String,
 
     val email: String,
     val phone: String,

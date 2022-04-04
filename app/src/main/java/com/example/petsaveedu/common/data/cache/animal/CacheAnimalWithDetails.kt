@@ -21,7 +21,9 @@ import com.example.petsaveedu.common.data.cache.org.CacheOrganization
     indices = [ Index("organizationId") ]
 )
 data class CacheAnimalWithDetails(
-    @PrimaryKey(autoGenerate = false) val id: Long,
+    @PrimaryKey(autoGenerate = false) val animalId: Long,
+    val organizationId: String,
+
     val name: String,
     val type: String,
 
