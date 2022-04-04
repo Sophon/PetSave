@@ -1,11 +1,11 @@
-package com.example.petsaveedu.common.data.cache.animal
+package com.example.petsaveedu.common.data.cache.model.animal
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.petsaveedu.common.data.cache.org.CacheOrganization
+import com.example.petsaveedu.common.data.cache.model.org.CacheOrganization
 
 
 @Entity(

@@ -1,4 +1,4 @@
-package com.example.petsaveedu.common.data.cache.animal
+package com.example.petsaveedu.common.data.cache.model.animal
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

@@ -1,4 +1,4 @@
-package com.example.petsaveedu.common.data.cache.org
+package com.example.petsaveedu.common.data.cache.model.org
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
