@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.petsaveedu.common.domain.model.animal.Media
 
 @Entity(
     tableName = "photos",
@@ -19,9 +20,23 @@ import androidx.room.PrimaryKey
     indices = [ Index("animalId") ]
 )
 data class CachePhoto(
-    @PrimaryKey(autoGenerate = true) val photoId: Long,
+    @PrimaryKey(autoGenerate = true) val photoId: Long = 0,
     val animalId: Long,
 
     val medium: String,
     val full: String
-)
+) {
+    companion object {
+        fun fromDomain(animalId: Long, photo: Media.Photo): CachePhoto {
+            return CachePhoto(
+                animalId = animalId,
+                medium = photo.medium,
+                full = photo.full
+            )
+        }
+    }
+
+    fun toDomain(): Media.Photo {
+        return Media.Photo(medium, full)
+    }
+}

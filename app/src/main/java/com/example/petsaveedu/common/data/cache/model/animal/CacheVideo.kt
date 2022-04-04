@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.petsaveedu.common.domain.model.animal.Media
 
 @Entity(
     tableName = "videos",
@@ -23,4 +24,17 @@ data class CacheVideo(
     val animalId: Long,
 
     val video: String
-)
+) {
+    companion object {
+        fun fromDomain(animalId: Long, video: Media.Video): CacheVideo {
+            return CacheVideo(
+                animalId = animalId,
+                video = video.video
+            )
+        }
+    }
+
+    fun toDomain(): Media.Video {
+        return Media.Video(video)
+    }
+}
