@@ -3,7 +3,7 @@ package com.example.petsaveedu.common.domain.model.animal
 import org.threeten.bp.LocalDateTime
 
 data class Animal(
-    val id: String,
+    val id: Long,
     val name: String,
     val type: String,
     val media: Media,

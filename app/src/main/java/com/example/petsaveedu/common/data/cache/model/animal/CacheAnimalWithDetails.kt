@@ -7,6 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.petsaveedu.common.data.cache.model.org.CacheOrganization
 import com.example.petsaveedu.common.domain.model.animal.AdoptionStatus
+import com.example.petsaveedu.common.domain.model.animal.Animal
 import com.example.petsaveedu.common.domain.model.animal.Media
 import com.example.petsaveedu.common.domain.model.animal.details.*
 import com.example.petsaveedu.common.utils.DateTimeUtils
@@ -84,7 +85,26 @@ data class CacheAnimalWithDetails(
         }
     }
 
-    fun toDomain(
+    fun toDomainAnimal(
+        photos: List<CachePhoto>,
+        videos: List<CacheVideo>,
+        tags: List<CacheTag>
+    ): Animal {
+        return Animal(
+            id = animalId,
+            name = name,
+            type = type,
+            media = Media(
+                photos = photos.map { it.toDomain() },
+                videos = videos.map { it.toDomain() }
+            ),
+            tags = tags.map { it.tag },
+            adoptionStatus = AdoptionStatus.valueOf(adoptionStatus),
+            publishedAt = DateTimeUtils.parse(publishedAt)
+        )
+    }
+
+    fun toDomainAnimalWithDetails(
         organization: CacheOrganization,
         photos: List<CachePhoto>,
         videos: List<CacheVideo>,
