@@ -5,7 +5,7 @@ import com.example.petsaveedu.common.data.cache.model.animal.*
 import io.reactivex.Flowable
 
 @Dao
-interface AnimalsDao {
+abstract class AnimalsDao {
 
     @Transaction
     @Query("SELECT * FROM animals ORDER BY animalId DESC")
