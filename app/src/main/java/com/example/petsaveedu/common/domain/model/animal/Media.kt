@@ -27,6 +27,6 @@ data class Media(
     }
 
     data class Video(
-        val embed: String
+        val video: String
     )
 }
